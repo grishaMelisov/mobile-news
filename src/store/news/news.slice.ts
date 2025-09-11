@@ -74,5 +74,3 @@ export const newsSlice = createSlice({
       });
   },
 });
-
-export const { setFilter, resetFilter } = newsSlice.actions;

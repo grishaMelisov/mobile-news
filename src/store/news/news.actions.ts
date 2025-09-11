@@ -4,6 +4,7 @@ import { type INewsData, type Article } from './news.interface';
 import { getErrorMessage } from '../../utils/errorHandler';
 import type { RootStateType } from '../store';
 import { selectFq } from '../../utils/selectFq';
+import { newsSlice } from './news.slice';
 
 /*
  * Первый чанк новостей
@@ -49,3 +50,8 @@ export const refreshNews = createAsyncThunk<Article[], void>(
     }
   }
 );
+
+/*
+ * синхронные экшены
+ */
+export const { setFilter, resetFilter } = newsSlice.actions;

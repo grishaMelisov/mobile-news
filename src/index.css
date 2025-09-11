@@ -36,16 +36,16 @@
   --color-text-base: var(--color-black);
   --color-text-news-title: var(--color-brandies-blue);
   --color-text-news-date: var(--color-auro-metal);
+  --color-divider-color: var(--color-bright-gray);
 
   --max-content-width: 360px;
 
   /* Typography */
-  --font-size-xs: 12px;
-  --font-size-sm: 14px;
-  --font-size-base: 16px;
-  --font-size-h3: 14px;
-  --font-size-h2: 18px;
-  --font-size-h1: 24px;
+  --text-xs: 12px;
+  --text-sm: 14px;
+  --text-base: 16px;
+  --text-h2: 22px;
+  --text-h1: 24px;
 
   /* Explore shell */
   --explore_padding-inline: 20px;
@@ -55,7 +55,7 @@
 @layer base {
   body {
     font-family: 'Lato', system-ui, Avenir, Helvetica, Arial, sans-serif;
-    font-size: var(--font-size-base);
+    font-size: var(--text-base);
     background-color: var(--color-bg-color);
 
     font-synthesis: none;
