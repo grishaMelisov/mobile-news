@@ -1,19 +1,21 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { getNews, loadMoreNews, refreshNews } from './news.actions';
+import type { Article, NewsCategory } from './news.interface';
 
-export interface Article {
-  abstract: string;
-  web_url: string;
-  pub_date: string;
-  source: string;
-  multimedia: { url: string }[];
-}
+// export interface Article {
+//   abstract: string;
+//   web_url: string;
+//   pub_date: string;
+//   source: string;
+//   multimedia: { url: string }[];
+// }
 
 interface NewsState {
   articles: Article[];
   loading: boolean;
   error: string | null;
   lastLoaded: { year: number; month: number } | null;
+  currentFilter: NewsCategory | null;
 }
 
 const initialState: NewsState = {
@@ -21,12 +23,22 @@ const initialState: NewsState = {
   loading: false,
   error: null,
   lastLoaded: null,
+  currentFilter: null,
 };
 
 export const newsSlice = createSlice({
   name: 'news',
   initialState,
-  reducers: {},
+  reducers: {
+    setFilter: (state, action) => {
+      state.currentFilter = action.payload;
+      state.articles = [];
+    },
+    resetFilter: (state) => {
+      state.currentFilter = null;
+      state.articles = [];
+    },
+  },
   extraReducers: (builder) => {
     /*
      * первая загрузка
@@ -62,3 +74,5 @@ export const newsSlice = createSlice({
       });
   },
 });
+
+export const { setFilter, resetFilter } = newsSlice.actions;
