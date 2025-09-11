@@ -1,29 +1,62 @@
 @import 'tailwindcss';
 
-@theme {
-  --color-soft-black: #1f1f1f;
-  --color-background: #fff;
+@font-face {
+  font-family: 'Lato';
+  src: url('/fonts/LatoRegular400.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
 
-  --max-content-width: 1440px;
+@font-face {
+  font-family: 'Lato';
+  src: url('/fonts/LatoBold700.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lato';
+  src: url('/fonts/LatoBlack900.woff2') format('woff2');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  /* Colors */
+  --color-black: #000000;
+  --color-white: #ffffff;
+  --color-brandies-blue: #096ffa;
+  --color-auro-metal: #6d787a;
+  --color-bright-gray: #ededed;
+
+  --color-bg-color: var(--color-white);
+  --color-text-base: var(--color-black);
+  --color-text-news-title: var(--color-brandies-blue);
+  --color-text-news-date: var(--color-auro-metal);
+
+  --max-content-width: 360px;
 
   /* Typography */
-  --line-height-text: 18px;
-  --font-size-text: 18px;
-  --font-wieght-text: 400;
-  --color-text-primary: var(--color-soft-black);
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-base: 16px;
+  --font-size-h3: 14px;
+  --font-size-h2: 18px;
+  --font-size-h1: 24px;
 
   /* Explore shell */
   --explore_padding-inline: 20px;
+  --max-content-width: 360px;
 }
 
 @layer base {
   body {
-    font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-    font-size: var(--font-size-text);
-    line-height: var(--line-height-text);
-    font-weight: var(--font-wieght-text);
-
-    background-color: var(--color-background);
+    font-family: 'Lato', system-ui, Avenir, Helvetica, Arial, sans-serif;
+    font-size: var(--font-size-base);
+    background-color: var(--color-bg-color);
 
     font-synthesis: none;
     text-rendering: optimizeLegibility;
@@ -35,10 +68,10 @@
 @layer utilities {
   .explore-shell {
     padding-inline: var(--explore_padding-inline);
-    max-width: var(--max-content-width, 2520px);
+    max-width: var(--max-content-width, 1440px);
     margin-inline: auto;
 
-    @media (min-width: 744px) {
+    /* @media (min-width: 744px) {
       --explore_padding-inline: 40px;
     }
 
@@ -48,10 +81,10 @@
 
     @media (min-width: 1440px) {
       --explore_padding-inline: 80px;
-    }
+    } */
   }
 
-  .grid-shell {
+  /* .grid-shell {
     grid-template-columns: repeat(
       var(--breakpoint-grid_columns, 1),
       minmax(0, 1fr)
@@ -75,7 +108,7 @@
     @media (min-width: 1880px) {
       --breakpoint-grid_columns: 6;
     }
-  }
+  } */
 
   .text-trim {
     overflow: clip;
