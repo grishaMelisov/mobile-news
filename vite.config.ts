@@ -8,7 +8,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://example-backend.com',
+        target: 'https://api.nytimes.com/svc',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ''),
       },

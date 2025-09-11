@@ -1,10 +1,86 @@
 @import 'tailwindcss';
 
 @theme {
+  --color-soft-black: #1f1f1f;
+  --color-background: #fff;
+
+  --max-content-width: 1440px;
+
+  /* Typography */
+  --line-height-text: 18px;
+  --font-size-text: 18px;
+  --font-wieght-text: 400;
+  --color-text-primary: var(--color-soft-black);
+
+  /* Explore shell */
+  --explore_padding-inline: 20px;
 }
 
 @layer base {
+  body {
+    font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+    font-size: var(--font-size-text);
+    line-height: var(--line-height-text);
+    font-weight: var(--font-wieght-text);
+
+    background-color: var(--color-background);
+
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
 }
 
 @layer utilities {
+  .explore-shell {
+    padding-inline: var(--explore_padding-inline);
+    max-width: var(--max-content-width, 2520px);
+    margin-inline: auto;
+
+    @media (min-width: 744px) {
+      --explore_padding-inline: 40px;
+    }
+
+    @media (min-width: 1128px) {
+      --explore_padding-inline: 40px;
+    }
+
+    @media (min-width: 1440px) {
+      --explore_padding-inline: 80px;
+    }
+  }
+
+  .grid-shell {
+    grid-template-columns: repeat(
+      var(--breakpoint-grid_columns, 1),
+      minmax(0, 1fr)
+    );
+    gap: 40px 24px;
+    grid-auto-flow: row dense;
+    --breakpoint-grid_columns: 1;
+
+    @media (min-width: 500px) {
+      --breakpoint-grid_columns: 2;
+    }
+    @media (min-width: 950px) {
+      --breakpoint-grid_columns: 3;
+    }
+    @media (min-width: 1128px) {
+      --breakpoint-grid_columns: 4;
+    }
+    @media (min-width: 1640px) {
+      --breakpoint-grid_columns: 5;
+    }
+    @media (min-width: 1880px) {
+      --breakpoint-grid_columns: 6;
+    }
+  }
+
+  .text-trim {
+    overflow: clip;
+    text-overflow: ellipsis;
+    word-break: break-all;
+    white-space: nowrap;
+  }
 }
