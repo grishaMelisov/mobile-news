@@ -3,6 +3,7 @@ import { API_ROUTES } from '../../api/api.routes';
 import type { INewsData, NewsResponse } from '../../store/news/news.interface';
 
 export const newsService = {
+  //TODO переделать что первая загрузка всегда самые новые.
   async fetchNewsByMonth({ year, month, page = 0, fq }: INewsData) {
     const begin_date = `${year}${String(month).padStart(2, '0')}01`;
     const end_date = `${year}${String(month).padStart(2, '0')}${new Date(

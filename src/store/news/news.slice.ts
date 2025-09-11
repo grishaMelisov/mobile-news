@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { getNews } from './news.actions';
+import { getNews, loadMoreNews, refreshNews } from './news.actions';
 
 export interface Article {
   abstract: string;
@@ -28,17 +28,37 @@ export const newsSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
+    /*
+     * первая загрузка
+     */
     builder
       .addCase(getNews.pending, (state) => {
         state.loading = true;
       })
       .addCase(getNews.fulfilled, (state, action) => {
         state.loading = false;
-        state.articles.push(...action.payload);
+        state.articles = action.payload;
       })
       .addCase(getNews.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
+      })
+
+      /*
+       * load more
+       */
+      .addCase(loadMoreNews.fulfilled, (state, action) => {
+        state.articles.push(...action.payload);
+      })
+
+      /*
+       * refresh
+       */
+      .addCase(refreshNews.fulfilled, (state, action) => {
+        const newArticles = action.payload.filter(
+          (a) => !state.articles.find((old) => old.web_url === a.web_url)
+        );
+        state.articles.unshift(...newArticles);
       });
   },
 });
