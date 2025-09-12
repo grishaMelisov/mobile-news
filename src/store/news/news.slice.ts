@@ -1,14 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { getNews, loadMoreNews, refreshNews } from './news.actions';
+import { fetchLatest, fetchNews, refreshNews } from './news.actions';
 import type { Article, NewsCategory } from './news.interface';
-
-// export interface Article {
-//   abstract: string;
-//   web_url: string;
-//   pub_date: string;
-//   source: string;
-//   multimedia: { url: string }[];
-// }
 
 interface NewsState {
   articles: Article[];
@@ -38,29 +30,43 @@ export const newsSlice = createSlice({
       state.currentFilter = null;
       state.articles = [];
     },
+    resetArticles: (state) => {
+      state.articles = [];
+    },
   },
+
+  /*
+   * fetch news
+   */
   extraReducers: (builder) => {
-    /*
-     * первая загрузка
-     */
     builder
-      .addCase(getNews.pending, (state) => {
+      .addCase(fetchNews.pending, (state) => {
         state.loading = true;
       })
-      .addCase(getNews.fulfilled, (state, action) => {
+      .addCase(fetchNews.fulfilled, (state, action) => {
         state.loading = false;
-        state.articles = action.payload;
+
+        state.articles.push(...action.payload);
       })
-      .addCase(getNews.rejected, (state, action) => {
+      .addCase(fetchNews.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       })
 
       /*
-       * load more
+       * fetch latest
        */
-      .addCase(loadMoreNews.fulfilled, (state, action) => {
+      .addCase(fetchLatest.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchLatest.fulfilled, (state, action) => {
+        state.loading = false;
+
         state.articles.push(...action.payload);
+      })
+      .addCase(fetchLatest.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
       })
 
       /*

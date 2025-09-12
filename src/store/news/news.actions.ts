@@ -9,12 +9,12 @@ import { newsSlice } from './news.slice';
 /*
  * Первый чанк новостей
  */
-export const getNews = createAsyncThunk<Article[], INewsData>(
+export const fetchLatest = createAsyncThunk<Article[], { page?: number }>(
   'news/loadNews',
-  async (data, thunkApi) => {
+  async ({ page = 0 } = {}, thunkApi) => {
     try {
       const fq = selectFq(thunkApi.getState() as RootStateType);
-      return await newsService.fetchNewsByMonth({ ...data, fq });
+      return await newsService.fetchLatest(fq, page);
     } catch (error) {
       return thunkApi.rejectWithValue(getErrorMessage(error));
     }
@@ -24,8 +24,8 @@ export const getNews = createAsyncThunk<Article[], INewsData>(
 /*
  * Догрузка для инфинити скролла
  */
-export const loadMoreNews = createAsyncThunk<Article[], INewsData>(
-  'news/loadMore',
+export const fetchNews = createAsyncThunk<Article[], INewsData>(
+  'news/fetch',
   async (data, thunkApi) => {
     try {
       const fq = selectFq(thunkApi.getState() as RootStateType);
@@ -54,4 +54,4 @@ export const refreshNews = createAsyncThunk<Article[], void>(
 /*
  * синхронные экшены
  */
-export const { setFilter, resetFilter } = newsSlice.actions;
+export const { setFilter, resetFilter, resetArticles } = newsSlice.actions;

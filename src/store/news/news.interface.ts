@@ -1,9 +1,13 @@
 export interface Multimedia {
+  caption: string;
+  credit: string;
+  default: Default;
+}
+
+export interface Default {
+  height: number;
   url: string;
-  subtype?: string;
-  type?: string;
-  height?: number;
-  width?: number;
+  width: number;
 }
 
 export interface Article {
@@ -11,14 +15,14 @@ export interface Article {
   web_url: string;
   pub_date: string;
   source: string;
-  multimedia: Multimedia[];
+  multimedia: Multimedia;
   section_name: string;
   news_desk: string;
 }
 
 export interface INewsData {
-  year: number;
-  month: number;
+  end_date?: string;
+  begin_date?: string;
   page?: number;
   fq?: string;
 }

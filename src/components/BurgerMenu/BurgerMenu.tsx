@@ -11,10 +11,11 @@ interface BurgerMenuProps {
 }
 
 export function BurgerMenu({ isOpen, onClose }: BurgerMenuProps) {
-  const { setFilter } = useNewsActions();
+  const { setFilter, resetArticles } = useNewsActions();
 
   const handleCategoryClick = (cat: string) => {
     setFilter(cat);
+    resetArticles();
     onClose();
   };
 
