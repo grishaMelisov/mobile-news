@@ -7,12 +7,17 @@ import { useTypedSelector } from './store/hooks/useTypedSelector';
 import { NewsSection } from './components/News/NewsSection';
 import { formatPubDateToEndDate, getTodayAsEndDate } from './utils/date';
 
+const INITIAL_PAGE = 0;
+const MAX_PAGES_PER_API = 100;
+const SCROLL_THRESHOLD = 100;
+const DEBOUNCE_DELAY = 5000;
+
 function App() {
-  const { fetchNews, fetchLatest } = useNewsActions();
+  const { fetchNews } = useNewsActions();
   const { articles, error, currentFilter } = useTypedSelector(
     (state) => state.news
   );
-  const [currentPage, setCurrentPage] = useState(98);
+  const [currentPage, setCurrentPage] = useState(97);
   const [endDate, setEndDate] = useState(getTodayAsEndDate());
   const [isFetching, setIsFetching] = useState(false);
   const hasMore = articles.length > 0 && articles.length % 10 === 0;
@@ -27,7 +32,7 @@ function App() {
       if (
         e.target.documentElement.scrollHeight -
           (e.target.documentElement.scrollTop + window.innerHeight) <
-          100 &&
+          SCROLL_THRESHOLD &&
         !isFetching &&
         hasMore &&
         !error
@@ -43,28 +48,34 @@ function App() {
     return () => document.removeEventListener('scroll', scrollHandler);
   }, [scrollHandler]);
 
+  const canFetchNextPage =
+    isFetching && hasMore && currentPage < MAX_PAGES_PER_API - 1;
+  const reachedLimit = currentPage === MAX_PAGES_PER_API - 1;
+
   useEffect(() => {
-    if (isFetching && hasMore && currentPage < 99) {
-      // задержку ставлю чтобы в лимиты не упиратсья по апи
-      setTimeout(() => {
-        fetchNews({
-          end_date: endDate,
-          page: currentPage + 1,
-        })
-          .then(() => {
-            setCurrentPage((prev) => prev + 1);
-          })
+    if (canFetchNextPage) {
+      const timer = setTimeout(() => {
+        fetchNews({ end_date: endDate, page: currentPage + 1 })
+          .then(() => setCurrentPage((prev) => prev + 1))
           .finally(() => setIsFetching(false));
-      }, 5000);
-    } else if (currentPage > 98) {
+      }, DEBOUNCE_DELAY);
+
+      return () => clearTimeout(timer);
+    }
+
+    if (reachedLimit) {
       const lastArticle = articles[articles.length - 1];
       if (lastArticle) {
         const newEndDate = formatPubDateToEndDate(lastArticle.pub_date);
         setEndDate(newEndDate);
-        setCurrentPage(-1);
+        setCurrentPage(INITIAL_PAGE - 1);
       }
     }
   }, [isFetching, currentPage, fetchNews, hasMore]);
+
+  const retryLoading = () => {
+    setIsFetching(true);
+  };
 
   return (
     <div className="flex flex-col items-center">
@@ -82,7 +93,7 @@ function App() {
           <div>Ошибка загрузки..</div>
           <button
             className="border mt-1 cursor-pointer transition-scale duration-200 border-divider-color rounded p-1 shadow-sm hover:bg-divider-color"
-            onClick={() => setIsFetching(true)}
+            onClick={() => retryLoading()}
           >
             Еще раз?
           </button>
