@@ -11,22 +11,28 @@ const INITIAL_PAGE = 0;
 const MAX_PAGES_PER_API = 100;
 const SCROLL_THRESHOLD = 100;
 const DEBOUNCE_DELAY = 5000;
+const REFRESH_NEWS_INTERVAL = 30000;
 
 function App() {
-  const { fetchNews } = useNewsActions();
+  const { fetchNews, refreshNews } = useNewsActions();
   const { articles, error, currentFilter } = useTypedSelector(
     (state) => state.news
   );
-  const [currentPage, setCurrentPage] = useState(97);
+  const [currentPage, setCurrentPage] = useState(INITIAL_PAGE);
   const [endDate, setEndDate] = useState(getTodayAsEndDate());
   const [isFetching, setIsFetching] = useState(false);
   const hasMore = articles.length > 0 && articles.length % 10 === 0;
 
-  // Загрузка первоначальных данных
+  /*
+   * инит загрузка новостей
+   */
   useEffect(() => {
     fetchNews({});
   }, [fetchNews, currentFilter]);
 
+  /*
+   * инфинит скролл
+   */
   const scrollHandler = useCallback(
     (e) => {
       if (
@@ -52,6 +58,9 @@ function App() {
     isFetching && hasMore && currentPage < MAX_PAGES_PER_API - 1;
   const reachedLimit = currentPage === MAX_PAGES_PER_API - 1;
 
+  /*
+   * овер инженеринг по подггрузке новостей игнорируя ограничения апи
+   */
   useEffect(() => {
     if (canFetchNextPage) {
       const timer = setTimeout(() => {
@@ -73,13 +82,24 @@ function App() {
     }
   }, [isFetching, currentPage, fetchNews, hasMore]);
 
+  /*
+   * Интервал на догрузку новый новостей
+   */
+  useEffect(() => {
+    const interval = setInterval(() => {
+      refreshNews();
+    }, REFRESH_NEWS_INTERVAL);
+
+    return () => clearInterval(interval);
+  }, [refreshNews, currentFilter]);
+
   const retryLoading = () => {
     setIsFetching(true);
   };
 
   return (
     <div className="flex flex-col items-center">
-      <header className="sticky w-full top-0 z-50 border-b border-divider-color bg-bg-color">
+      <header className="sticky w-full mb-3 top-0 z-50 border-b border-divider-color bg-bg-color">
         <Header />
       </header>
       <main className="explore-shell w-full flex-1 flex flex-col items-center">

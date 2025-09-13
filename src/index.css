@@ -71,18 +71,6 @@
     padding-inline: var(--explore_padding-inline);
     max-width: var(--max-content-width, 1440px);
     margin-inline: auto;
-
-    /* @media (min-width: 744px) {
-      --explore_padding-inline: 40px;
-    }
-
-    @media (min-width: 1128px) {
-      --explore_padding-inline: 40px;
-    }
-
-    @media (min-width: 1440px) {
-      --explore_padding-inline: 80px;
-    } */
   }
 
   .grid-cols-card {

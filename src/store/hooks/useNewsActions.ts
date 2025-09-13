@@ -9,8 +9,6 @@ export const useNewsActions = () => {
   const dispatch = useDispatch<AppDispatch>();
   return useMemo(
     () => ({
-      fetchLatest: (page?: number) =>
-        dispatch(useActions.fetchLatest({ page })).unwrap(),
       fetchNews: (data: INewsData) =>
         dispatch(useActions.fetchNews(data)).unwrap(),
       refreshNews: () => dispatch(useActions.refreshNews()).unwrap,

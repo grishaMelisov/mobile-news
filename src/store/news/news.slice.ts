@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchLatest, fetchNews, refreshNews } from './news.actions';
+import { fetchNews, refreshNews } from './news.actions';
 import type { Article, NewsCategory } from './news.interface';
 
 interface NewsState {
@@ -49,22 +49,6 @@ export const newsSlice = createSlice({
         state.articles.push(...action.payload);
       })
       .addCase(fetchNews.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
-      })
-
-      /*
-       * fetch latest
-       */
-      .addCase(fetchLatest.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(fetchLatest.fulfilled, (state, action) => {
-        state.loading = false;
-
-        state.articles.push(...action.payload);
-      })
-      .addCase(fetchLatest.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       })

@@ -9,13 +9,6 @@ export const newsService = {
     page = 0,
     fq,
   }: INewsData) {
-    // const begin_date = `${year}${String(month).padStart(2, '0')}01`;
-    // const end_date = `${year}${String(month).padStart(2, '0')}${new Date(
-    //   year,
-    //   month,
-    //   0
-    // ).getDate()}`;
-
     const response = await axiosInstance.get<NewsResponse>(
       API_ROUTES.NEWS.GET,
       {

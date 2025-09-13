@@ -7,21 +7,6 @@ import { selectFq } from '../../utils/selectFq';
 import { newsSlice } from './news.slice';
 
 /*
- * Первый чанк новостей
- */
-export const fetchLatest = createAsyncThunk<Article[], { page?: number }>(
-  'news/loadNews',
-  async ({ page = 0 } = {}, thunkApi) => {
-    try {
-      const fq = selectFq(thunkApi.getState() as RootStateType);
-      return await newsService.fetchLatest(fq, page);
-    } catch (error) {
-      return thunkApi.rejectWithValue(getErrorMessage(error));
-    }
-  }
-);
-
-/*
  * Догрузка для инфинити скролла
  */
 export const fetchNews = createAsyncThunk<Article[], INewsData>(
